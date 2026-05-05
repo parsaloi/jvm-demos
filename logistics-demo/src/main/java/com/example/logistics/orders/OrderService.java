@@ -28,9 +28,19 @@ public class OrderService {
     public void placeOrder(String customerEmail, BigDecimal amount) {
         var orderId = UUID.randomUUID();
         log.info("📝 Order Module: Saving order {} to database...", orderId);
-        
         repository.save(new Order(orderId, customerEmail, amount));
-        
+
+        // =====================================================================
+        // 🚨 DEMO TRAP: UNCOMMENT TO TRIGGER ARCHITECTURE VIOLATION
+        // We are going to attempt to directly instantiate an internal class 
+        // from the Shipping module. Standard Spring allows this. Modulith does not.
+        // =====================================================================
+        //
+        var illegalAccess = new com.example.logistics.shipping.internal.ShippingListener();
+        log.warn("🚨 Wait, I successfully bypassed the event registry: {}", illegalAccess);
+        //
+        // =====================================================================
+
         log.info("📢 Order Module: Publishing OrderPlacedEvent...");
         events.publishEvent(new OrderPlacedEvent(orderId, customerEmail, amount));
     }
