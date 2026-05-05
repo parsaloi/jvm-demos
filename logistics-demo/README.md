@@ -3,7 +3,7 @@
 This repository is the companion code for the **Kenya Java User Group (JUG)** presentation on building modular, event-driven applications using **Spring Modulith** and **Java 25**.
 
 ## 🎥 Demo
-* `[Watch the Demo Walkthrough](https://link-to-your-video)`
+* [Watch the Demo Walkthrough]()
 
 ## 🚀 The Architecture
 This project demonstrates a structurally enforced Monolith leveraging Spring Modulith's **Event Publication Registry** and Java's **Virtual Threads** for asynchronous event handling.
