@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <!-- Include Spring Boot's default color converters -->
+    <include resource="org/springframework/boot/logging/logback/defaults.xml" />
+
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <!-- 
+              Breakdown of the pattern:
+              %clr(%d{HH:mm:ss.SSS}){faint} -> Faint timestamp
+              %clr(%-5level)                -> Color-coded log level (INFO is blue, WARN is yellow, ERROR is red)
+              %clr([%15.15thread]){magenta} -> Magenta thread names (Perfect for highlighting Virtual Threads!)
+              %clr(%-40.40logger{39}){cyan} -> Cyan class names
+              %m%n                          -> The actual message 
+            -->
+            <pattern>%clr(%d{HH:mm:ss.SSS}){faint} %clr(%-5level) %clr([%15.15thread]){magenta} %clr(---){faint} %clr(%-40.40logger{39}){cyan} %clr(:){faint} %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}</pattern>
+        </encoder>
+    </appender>
+
+    <!-- Silence some of the verbose Spring internal logs so your business logic shines -->
+    <logger name="org.springframework.boot" level="WARN"/>
+    <logger name="org.hibernate" level="WARN"/>
+    <logger name="com.zaxxer.hikari" level="WARN"/>
+    
+    <!-- Your application logs -->
+    <logger name="com.example.logistics" level="INFO"/>
+
+    <root level="INFO">
+        <appender-ref ref="CONSOLE" />
+    </root>
+</configuration>
