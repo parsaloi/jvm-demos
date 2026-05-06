@@ -36,8 +36,8 @@ public class OrderService {
         // from the Shipping module. Standard Spring allows this. Modulith does not.
         // =====================================================================
         //
-        var illegalAccess = new com.example.logistics.shipping.internal.ShippingListener();
-        log.warn("🚨 Wait, I successfully bypassed the event registry: {}", illegalAccess);
+        // var illegalAccess = new com.example.logistics.shipping.internal.ShippingListener();
+        // log.warn("🚨 Wait, I successfully bypassed the event registry: {}", illegalAccess);
         //
         // =====================================================================
 
