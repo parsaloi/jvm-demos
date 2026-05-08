@@ -44,6 +44,24 @@ To see Spring Modulith's architectural enforcement in action, run the test suite
 This runs `ModularityTests.java`, which verifies that no module violates encapsulation rules and automatically generates updated PlantUML architecture diagrams in the `/target/spring-modulith-docs` directory.
 
 ## Troubleshoot
+You may get permission issues when trying using the maven wrapper scripts on Unix environments.  
+
+**Linux:**
+```bash
+chmod +x mvnw
+# Then run the application
+./mvnw clean spring-boot:run
+```
+
+Ensure you can run local scripts on Windows.  
+
+**Windows:**
+```powershell
+Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
+# Then run the application
+.\mvnw.cmd clean spring-boot:run
+```
+
 You may get a maven build failure with a "release 25 not supported" error message.  
 * Verify what the complier sees:
   
