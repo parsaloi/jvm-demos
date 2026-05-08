@@ -42,3 +42,32 @@ To see Spring Modulith's architectural enforcement in action, run the test suite
 .\mvnw.cmd test
 ```
 This runs `ModularityTests.java`, which verifies that no module violates encapsulation rules and automatically generates updated PlantUML architecture diagrams in the `/target/spring-modulith-docs` directory.
+
+## Troubleshoot
+You may get a maven build failure with a "release 25 not supported" error message.  
+* Verify what the complier sees:
+  **Windows:**
+  ```powershell
+  .\mvnw.cmd --version
+  # Expected output
+  Apache Maven 3.9.15 (98b2cdbfdb5f1ac8781f537ea9acccaed7922349)
+  Maven home: C:\Users\mypc\.m2\wrapper\dists\apache-maven-3.9.15\0226a00282e400185496f3b60ec5a3f029cbdc6893912937d4876d57695224e1
+  Java version: 25.0.3, vendor: BellSoft, runtime: C:\Program Files\BellSoft\LibericaJDK-25-Full
+  Default locale: en_US, platform encoding: UTF-8
+  OS name: "windows 10", version: "10.0", arch: "amd64", family: "windows"
+  ```
+
+  **Linux/MacOS:**
+  ```bash
+  ./mvnw --version
+  ```
+* If you have maven installed locally try use it to run the application.
+  **Windows:**
+  ```powershell
+  mvn.cmd clean spring-boot:run
+  ```
+
+  **Linux:**
+  ```bash
+  mvn clean spring-boot:run
+  ```
