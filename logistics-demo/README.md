@@ -61,7 +61,7 @@ You may get a maven build failure with a "release 25 not supported" error messag
   ```bash
   ./mvnw --version
   ```
-* If you have maven installed locally try use it to run the application.
+* If you have maven installed locally try use it to run the application.  
   **Windows:**
   ```powershell
   mvn.cmd clean spring-boot:run
