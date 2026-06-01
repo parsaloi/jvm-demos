@@ -1,1 +1,1 @@
-# jvm-brew
+# jvm-demos
