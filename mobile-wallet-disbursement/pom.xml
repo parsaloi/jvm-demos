@@ -11,8 +11,8 @@
         <maven.compiler.source>25</maven.compiler.source>
         <maven.compiler.target>25</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <hikaricp.version>6.2.1</hikaricp.version>
-        <postgresql.version>42.7.5</postgresql.version>
+        <hikaricp.version>7.0.1</hikaricp.version>
+        <postgresql.version>42.7.10</postgresql.version>
     </properties>
 
     <dependencies>
@@ -34,11 +34,24 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.13.0</version>
+                <version>3.14.1</version>
                 <configuration>
+                    <release>25</release>
                     <compilerArgs>
                         <arg>--enable-preview</arg>
+                        <arg>-Xlint:preview</arg>
                     </compilerArgs>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>3.6.2</version>
+                <configuration>
+                    <mainClass>com.jvmdemos.disbursement.Main</mainClass>
+                    <arguments>
+                        <argument>--enable-preview</argument>
+                    </arguments>
                 </configuration>
             </plugin>
         </plugins>
