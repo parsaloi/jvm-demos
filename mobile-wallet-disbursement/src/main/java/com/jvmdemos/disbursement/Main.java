@@ -8,6 +8,7 @@ import com.jvmdemos.disbursement.model.DisbursementItem;
 import com.jvmdemos.disbursement.model.DisbursementRequest;
 import com.jvmdemos.disbursement.repository.DisbursementRepository;
 import com.jvmdemos.disbursement.service.DisbursementOrchestrator;
+import com.jvmdemos.disbursement.service.SagaDisbursementOrchestrator;
 
 import java.math.BigDecimal;
 import java.sql.Connection;
@@ -49,7 +50,7 @@ public class Main {
 
             System.out.println("\n--------------------------------------------------------------------------------\n");
 
-            // --- SIMULATION 2: FAST-FAIL (THE AHA! MOMENT) ---
+            // --- SIMULATION 2: FAST-FAIL ---
             System.out.println("--- Starting Simulation 2: Interrupted Fast-Fail (Triggered via 999) ---");
             UUID failBatchId = UUID.randomUUID();
             List<DisbursementItem> failItems = List.of(
@@ -59,6 +60,22 @@ public class Main {
                 DisbursementItem.fromRequest(failBatchId, new DisbursementRequest("254766666666", new BigDecimal("750")))
             );
             orchestrator.processBatch(DisbursementBatch.initialize(failItems));
+
+            // --- SIMULATION 3: SAGA PATTERN ---
+            System.out.println("\n--------------------------------------------------------------------------------\n");
+            System.out.println("--- Starting Simulation 3: Saga Pattern (Partial Success) ---");
+
+            // Instantiate the specialized Saga orchestrator
+            SagaDisbursementOrchestrator sagaOrchestrator = new SagaDisbursementOrchestrator(repository, telcoClient);
+
+            UUID sagaBatchId = UUID.randomUUID();
+            List<DisbursementItem> sagaItems = List.of(
+                DisbursementItem.fromRequest(sagaBatchId, new DisbursementRequest("254777777777", new BigDecimal("4000"))), // Happy path
+                DisbursementItem.fromRequest(sagaBatchId, new DisbursementRequest("254799999999", new BigDecimal("3000"))), // Fast-fail trigger
+                DisbursementItem.fromRequest(sagaBatchId, new DisbursementRequest("254788888888", new BigDecimal("1500")))  // Happy path
+            );
+
+            sagaOrchestrator.processBatch(DisbursementBatch.initialize(sagaItems));
         }
     }
 
@@ -69,6 +86,14 @@ public class Main {
                 status VARCHAR(50) NOT NULL,
                 failure_reason TEXT,
                 created_at TIMESTAMP NOT NULL
+            );
+            CREATE TABLE IF NOT EXISTS disbursement_item (
+                item_id UUID PRIMARY KEY,
+                batch_id UUID,
+                phone_number VARCHAR(20) NOT NULL,
+                amount DECIMAL NOT NULL,
+                status VARCHAR(50) NOT NULL,
+                failure_reason TEXT
             );
         """;
 

@@ -2,6 +2,7 @@ package com.jvmdemos.disbursement.repository;
 
 import com.jvmdemos.disbursement.model.DisbursementBatch;
 import com.jvmdemos.disbursement.model.TransactionStatus;
+import com.jvmdemos.disbursement.model.DisbursementItem;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
@@ -68,6 +69,38 @@ public class DisbursementRepository {
 
         } catch (SQLException e) {
             throw new RuntimeException("Failed to update disbursement batch status", e);
+        }
+    }
+
+    public void insertItem(DisbursementItem item) {
+        String sql = "INSERT INTO disbursement_item (item_id, batch_id, phone_number, amount, status) VALUES (?, ?, ?, ?, ?)";
+        try (Connection conn = dataSource.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setObject(1, item.itemId());
+            stmt.setObject(2, item.batchId());
+            stmt.setString(3, item.phoneNumber());
+            stmt.setBigDecimal(4, item.amount());
+            stmt.setString(5, item.status().name());
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException("Failed to insert item", e);
+        }
+    }
+
+    public void updateItemStatus(UUID itemId, TransactionStatus status, String failureReason) {
+        String sql = "UPDATE disbursement_item SET status = ?, failure_reason = ? WHERE item_id = ?";
+        try (Connection conn = dataSource.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, status.name());
+            stmt.setString(2, failureReason);
+            stmt.setObject(3, itemId);
+            stmt.executeUpdate();
+
+            String statusIcon = status == TransactionStatus.SUCCESS ? "✅" : "❌";
+            System.out.printf("[%s] %s DB COMMIT: Updated Item %s to %s.%n",
+                    Thread.currentThread(), statusIcon, itemId, status.name());
+        } catch (SQLException e) {
+            throw new RuntimeException("Failed to update item status", e);
         }
     }
 }
